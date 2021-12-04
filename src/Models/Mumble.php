@@ -8,7 +8,6 @@
 namespace Jambo\Seat\QQ\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Seat\Eveapi\Models\Sde\InvGroup;
 
 class Mumble extends Model
 {

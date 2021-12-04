@@ -22,6 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 namespace Jambo\Seat\QQ;
 
 use Seat\Services\AbstractSeatPlugin;
+use Jambo\Seat\QQ\Commands\CheckMumUser;
 
 /**
  * Class YourPackageServiceProvider.
@@ -47,6 +48,8 @@ class QQServiceProvider extends AbstractSeatPlugin
 
         // Uncomment this block to extend imported SDE tables
         // $this->add_sde_tables();
+
+        $this->addCommands();
     }
 
     public function register()
@@ -136,6 +139,13 @@ class QQServiceProvider extends AbstractSeatPlugin
     private function add_migrations()
     {
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations/');
+    }
+
+    private function addCommands()
+    {
+        $this->commands([
+            CheckMumUser::class,
+        ]);
     }
 
     /**

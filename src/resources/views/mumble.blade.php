@@ -36,6 +36,10 @@
     </div>
     </div>
 
+    <?php
+    print_r($test)
+    ?>
+
 @stop
 
 @push('javascript')

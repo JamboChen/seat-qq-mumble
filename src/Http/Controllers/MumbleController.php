@@ -28,7 +28,7 @@ use Jambo\Seat\QQ\Models\Mumble;
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Corporation\CorporationMember;
 use Illuminate\Support\Facades\Hash;
-
+use Seat\Web\Models\Squads\SquadMember;
 /**
  * Class HomeController.
  *
@@ -41,42 +41,33 @@ class MumbleController extends Controller
      */
     public function getHome()
     {
-        $user = auth()->user()->main_character;
+        $user = auth()->user();
 
-        
-        if (Mumble::where('username', '=', $user['character_id'])->first() == null){
-            // $mum_info = new Mumble();
-            // $mum_info->username = $user['character_id'];
-            // $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
-            // $password = substr($random, 0, 20);
-            // $mum_info->pwhash = Hash::make($password);
-            // $mum_info->hashfn = 'bcrypt';
-            // $mum_info->display_name = $user['name'];
-            // $mum_info.save();
-        }
-
-        $mumDB = Mumble::where('username', '=', $user['character_id'])->first();
+        $mumDB = Mumble::where('user_id', '=', $user->id)->first();
         $address = '27.50.162.226';
         $port = '64738';
-        $username = $user['character_id'];
-        $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
-        $password = substr($random, 0, 20);
-        return view('yourpackage::mumble', compact('address', 'port', 'username', 'password'));
+        $username = $user->main_character_id;
+
+        $SquadMembers = SquadMember::select('squad_id','user_id')->get()->toArray();
+        $test = gettype($SquadMembers[0]['squad_id']);
+
+        return view('yourpackage::mumble', compact('address', 'port', 'username', 'test'));
     }
 
     public function setpw()
     {
 
         // 获取主角色ID
-        $user = auth()->user()->main_character;
+        $user = auth()->user();
 
         //查询是否有数据
-        $muminfo = Mumble::where('username', '=', $user['character_id'])->first();
+        $muminfo = Mumble::where('user_id', '=', $user->id)->first();
 
         //没有数据则增加
         if ($muminfo == null) {
             $mum_info = new Mumble();
-            $mum_info->username = $user['character_id'];
+            $mum_info->user_id = $user->id;
+            $mum_info->username = $user->main_character_id;
             $mum_info->pwhash = Hash::make(request('setpw'));
             $mum_info->hashfn = 'bcrypt';
             $mum_info->display_name = $user['name'];

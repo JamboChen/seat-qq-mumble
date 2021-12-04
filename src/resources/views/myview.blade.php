@@ -12,11 +12,7 @@
       </div>
       <button type="submit" class="btn btn-primary mb-2">确认</button>
     </form>
-
-    @php
-        echo auth()->user()->refresh_tokens
-    @endphp
-
+    
 @stop
 
 @push('javascript')

@@ -35,10 +35,11 @@ class CreateMumbleMumbleuserTable extends Migration
         if(Schema::hasTable('mumble_mumbleuser')) return; 
         Schema::create('mumble_mumbleuser', function (Blueprint $table) {
 
-            $table->increments('user_id');
+            $table->unsignedInteger('user_id')->primary();
+            
             $table->string('username', 254);
             $table->string('pwhash', 90);
-            $table->longText('groups')->nullable();
+            $table->unsignedInteger('groups')->nullable();
             $table->string('hashfn', 20);
             $table->string('display_name', 254);
             $table->string('certhash', 254)->nullable();
@@ -47,8 +48,11 @@ class CreateMumbleMumbleuserTable extends Migration
             $table->longText('release')->nullable();
             $table->INTEGER('version')->nullable();
         });
-    }
 
+        Schema::table('mumble_mumbleuser', function(Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+    }
     /**
      * Reverse the migrations.
      *
