@@ -29,6 +29,7 @@ use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Corporation\CorporationMember;
 use Illuminate\Support\Facades\Hash;
 use Seat\Web\Models\Squads\SquadMember;
+
 /**
  * Class HomeController.
  *
@@ -42,44 +43,38 @@ class MumbleController extends Controller
     public function getHome()
     {
         $user = auth()->user();
-
-        $mumDB = Mumble::where('user_id', '=', $user->id)->first();
         $address = '27.50.162.226';
         $port = '64738';
         $username = $user->main_character_id;
-
-        $SquadMembers = SquadMember::select('squad_id','user_id')->get()->toArray();
-        $test = gettype($SquadMembers[0]['squad_id']);
-
-        return view('yourpackage::mumble', compact('address', 'port', 'username', 'test'));
+        
+        // 数据库中有数据则读取
+        if(Mumble::where('user_id', $user->id)->exists()){
+            $password = Mumble::where('user_id', $user->id)->first()['pwhash'];
+        }
+        //没有则创建
+        else {
+            // 生成随机密码
+            $password = bin2hex(random_bytes(32));
+            // 保存数据
+            $muminfo = new Mumble();
+            $muminfo->user_id = $user->id;
+            $muminfo->username = $user->main_character_id;
+            $muminfo->pwhash = $password;
+            $muminfo->hashfn = 'none';
+            $muminfo->display_name = $user['name'];
+            $muminfo->save();
+        }
+        return view('yourpackage::mumble', compact('address', 'port', 'username', 'password'));
     }
 
     public function setpw()
     {
 
-        // 获取主角色ID
-        $user = auth()->user();
-
-        //查询是否有数据
-        $muminfo = Mumble::where('user_id', '=', $user->id)->first();
-
-        //没有数据则增加
-        if ($muminfo == null) {
-            $mum_info = new Mumble();
-            $mum_info->user_id = $user->id;
-            $mum_info->username = $user->main_character_id;
-            $mum_info->pwhash = Hash::make(request('setpw'));
-            $mum_info->hashfn = 'bcrypt';
-            $mum_info->display_name = $user['name'];
-            $mum_info->save();
-            
-        }
-        //有数据则修改
-        else {
-            //$muminfo->pwhash = Hash::make(request('setpw'),['rounds'=>12]);
-            $muminfo->pwhash = password_hash(request('setpw'), PASSWORD_DEFAULT);
-            $muminfo->save();
-        }
-        return redirect()->back()->with('success', '设定成功');
+        // 重置密码
+        $muminfo = Mumble::where('user_id', auth()->user()->id)->first();
+        $muminfo->pwhash = bin2hex(random_bytes(32));
+        $muminfo->save();
+        
+        return redirect()->back()->with('success', '重置成功');
     }
 }
