@@ -24,21 +24,17 @@
                 </div>
                 <div class="form-group">
                     <label for="srpPingContent">密码</label>
-                    <input type="password" class="form-control" name="setpw" id="setpw" placeholder="第一次使用请先设置密码">
+                    <input type="password" class="form-control" name="setpw" id="setpw" value="{{ $password }}"
+                        onfocusin="this.type='text';" onfocusout="this.type='password';" readonly>
                 </div>
-
-                <div class="btn-group pull-right" role="group">
-                    <input type="submit" class="btn btn-primary" value="设置密码" />
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <input type="submit" class="btn btn-danger " value="重置密码" />
                 </div>
                 {{ csrf_field() }}
             </div>
         </form>
     </div>
     </div>
-
-    <?php
-    print_r($test)
-    ?>
 
 @stop
 

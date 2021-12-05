@@ -35,10 +35,17 @@ class CreateQqTable extends Migration
 
         Schema::create('qq', function (Blueprint $table) {
 
-            $table->increments('id');
-            $table->INTEGER('qq')->unique();
-            $table->INTEGER('char_id');
-            $table->timestamps();
+            
+            $table->unsignedInteger('user_id')->primary();
+            $table->bigInteger('qq')->unique()->nullable();
+            $table->string('char_name');
+            $table->string('group')->nullable();
+            
+        });
+
+        Schema::table('qq', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('group')->references('name')->on('squads');
         });
     }
 

@@ -24,8 +24,6 @@ namespace Jambo\Seat\QQ\Http\Controllers;
 use Seat\Web\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Jambo\Seat\QQ\Models\QQInfo;
-use Seat\Eveapi\Models\Character\CharacterInfo;
-use Seat\Eveapi\Models\Corporation\CorporationMember;
 
 /**
  * Class HomeController.
@@ -39,51 +37,31 @@ class QQController extends Controller
      */
     public function getHome()
     {
-        $char_id = auth()->user()->main_character["character_id"];
-        $qqinfo = DB::table('qq')->where('char_id', $char_id)->value('qq');
-        //$qqinfo = QQInfo::find(3);
-        $request = "null";
-        return view('yourpackage::myview', compact('qqinfo', 'request'));
+        $qqinfo = DB::table('qq')->where('user_id', $userInfo = auth()->user()->id)->value('qq');
+
+        return view('yourpackage::qq', compact('qqinfo'));
     }
 
     public function setQQ()
     {
-        
-        //获取主角色ID
-        $char_id = auth()->user()->main_character["character_id"];
-        $test = auth()->user()->main_character;
 
-        //查询是否有数据
-        $qqinfo = QQinfo::where('char_id', '=', $char_id)->first();
+        $qq = request('qq');
 
-        //没有数据则增加
-        if ($qqinfo == null){
-            $qqinfo = new QQInfo();
-            $qqinfo->qq = request('qq');
-            $qqinfo->char_id = $char_id;
-            $qqinfo->save();
+        //获取主角色信息
+        $userInfo = auth()->user();
+
+        //查询 QQ 是否已被绑定
+        $qqCheck = QQinfo::where('qq', $qq)->where('user_id', '<>', $userInfo->id)->first();
+
+        // 没有则写入
+        if ($qqCheck == null) {
+            QQInfo::updateOrInsert(
+                ['user_id' => $userInfo->id],
+                ['qq' => $qq, 'char_name' => $userInfo->name]
+            );
             return redirect()->back()->with('success', 'QQ绑定成功');
-            
+        } else {
+            return redirect()->back()->with('error', 'QQ已被绑定');
         }
-        //有数据则修改
-        else{
-            if (QQinfo::where([
-                    ['qq', '=', request('qq')],
-                    ['char_id', '!=', $char_id]
-                ])->first() == null){
-
-
-                $qqinfo->qq = request('qq');
-                $qqinfo->char_id = $char_id;
-                $qqinfo->save();
-                return redirect()->back()
-                            ->with('success', 'QQ修改成功');
-            }
-            else{
-                return redirect()->back()->with('error', 'QQ已被绑定');
-                # return redirect()->back()->with('error', $test);
-            }
-        }
-        
-}
+    }
 }

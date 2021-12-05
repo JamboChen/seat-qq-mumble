@@ -16,10 +16,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "eveseat/services": "^4.1",
-        "eveseat/eveapi": "^4.0",
-        "eveseat/web": "^4.0",
-        "eveseat/eseye": "^2.0"
     },
     "extra": {
         "laravel": {

@@ -46,8 +46,6 @@ Route::group([
         'as'   => 'mumble.home',
         'uses' => 'MumbleController@setpw'
     ]);
-
-
 });
 
 
@@ -58,7 +56,7 @@ Route::group([
     'prefix' => 'api/v2/qq',
 ], function () {
 
-    Route::get('/bind-qq/{qq?}',[
+    Route::get('/bind-qq/{qq?}', [
         'as'   => 'qqApi.api',
         'uses' => 'QQApiController@getQQInfo'
     ]);

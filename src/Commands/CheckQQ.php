@@ -10,6 +10,7 @@ namespace Jambo\Seat\QQ\Commands;
 
 use Seat\Web\Models\Squads\SquadMember;
 use Jambo\Seat\QQ\Models\Mumble;
+use Jambo\Seat\QQ\Models\QQInfo;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\DB;
  * @package Jambo\Seat\QQ\Commands
  */
 
-class CheckMumUser extends Command
+class CheckQQ extends Command
 {
 
     /**
@@ -28,7 +29,7 @@ class CheckMumUser extends Command
      * @var string
      */
 
-    protected $signature = 'mumble:check:user';
+    protected $signature = 'QQ:check';
 
     /**
      * The console command description.
@@ -52,21 +53,21 @@ class CheckMumUser extends Command
         // Array ( [squad_id] => name ) 
         $SquadName = DB::table('squads')->pluck('name', 'id');
 
-        // 获取表：mumble_mumbleuser 中 column：user_id 数据
+        // 获取表：qq 中 column：user_id 数据
         // Array ( [index] => user_id )
-        $Mumberusers = Mumble::pluck('user_id');
+        $QQ = QQInfo::pluck('user_id');
 
-        foreach ($Mumberusers as $user_id) {
-            // 如果 mumble user 在 squad 中
+        foreach ($QQ as $user_id) {
+            // 如果 qq user 在 squad 中
             if (isset($user_id, $SquadMembers)) {
                 // 修改 group 数据为当前 squad name
-                Mumble::where('user_id', $user_id)
-                    ->update(['group' => $SquadName[$SquadMembers[$user_id]]]);;
+                QQInfo::where('user_id', $user_id)
+                    ->update(['group' => $SquadName[$SquadMembers[$user_id]]]);
             } else {
-                // 删除 mumble user
-                Mumble::where('user_id', $user_id)->delete();
+                // 删除 qq user
+                QQInfo::where('user_id', $user_id)->delete();
             }
         }
-        $this->line('Mumble users check finish');
+        $this->line('QQ check finish');
     }
 }

@@ -23,6 +23,7 @@ namespace Jambo\Seat\QQ;
 
 use Seat\Services\AbstractSeatPlugin;
 use Jambo\Seat\QQ\Commands\CheckMumUser;
+use Jambo\Seat\QQ\Commands\CheckQQ;
 
 /**
  * Class YourPackageServiceProvider.
@@ -145,6 +146,7 @@ class QQServiceProvider extends AbstractSeatPlugin
     {
         $this->commands([
             CheckMumUser::class,
+            CheckQQ::class,
         ]);
     }
 
