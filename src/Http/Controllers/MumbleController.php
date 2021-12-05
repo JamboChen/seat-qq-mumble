@@ -24,6 +24,13 @@ namespace Jambo\Seat\QQ\Http\Controllers;
 
 use Seat\Web\Http\Controllers\Controller;
 use Jambo\Seat\QQ\Models\Mumble;
+<<<<<<< HEAD
+=======
+use Seat\Eveapi\Models\Character\CharacterInfo;
+use Seat\Eveapi\Models\Corporation\CorporationMember;
+use Illuminate\Support\Facades\Hash;
+use Seat\Web\Models\Squads\SquadMember;
+>>>>>>> 6c94a4a07b3f113c9fa4a26aaa136c5d349545c9
 
 /**
  * Class HomeController.
