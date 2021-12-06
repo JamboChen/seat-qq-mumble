@@ -24,10 +24,6 @@ namespace Jambo\Seat\QQ\Http\Controllers;
 
 use Seat\Web\Http\Controllers\Controller;
 use Jambo\Seat\QQ\Models\Mumble;
-use Seat\Eveapi\Models\Character\CharacterInfo;
-use Seat\Eveapi\Models\Corporation\CorporationMember;
-use Illuminate\Support\Facades\Hash;
-use Seat\Web\Models\Squads\SquadMember;
 
 /**
  * Class HomeController.
@@ -53,7 +49,7 @@ class MumbleController extends Controller
         //没有则创建
         else {
             // 生成随机密码
-            $password = bin2hex(random_bytes(32));
+            $password = bin2hex(random_bytes(16));
             // 保存数据
             $muminfo = new Mumble();
             $muminfo->user_id = $user->id;
@@ -71,7 +67,7 @@ class MumbleController extends Controller
 
         // 重置密码
         $muminfo = Mumble::where('user_id', auth()->user()->id)->first();
-        $muminfo->pwhash = bin2hex(random_bytes(32));
+        $muminfo->pwhash = bin2hex(random_bytes(8));
         $muminfo->save();
         
         return redirect()->back()->with('success', '重置成功');

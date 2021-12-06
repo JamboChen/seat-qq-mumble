@@ -24,8 +24,7 @@
                 </div>
                 <div class="form-group">
                     <label for="srpPingContent">密码</label>
-                    <input type="password" class="form-control" name="setpw" id="setpw" value="{{ $password }}"
-                        onfocusin="this.type='text';" onfocusout="this.type='password';" readonly>
+                    <input type="text" class="form-control" name="setpw" id="setpw" value="{{ $password }}" readonly>
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <input type="submit" class="btn btn-danger " value="重置密码" />
