@@ -59,9 +59,9 @@ class CheckMumUser extends Command
         foreach ($Mumberusers as $user_id) {
             // 如果 mumble user 在 squad 中
             if (isset($user_id, $SquadMembers)) {
-                // 修改 group 数据为当前 squad name
+                // 修改 groups 数据为当前 squad name
                 Mumble::where('user_id', $user_id)
-                    ->update(['group' => $SquadName[$SquadMembers[$user_id]]]);;
+                    ->update(['groups' => $SquadName[$SquadMembers[$user_id]]]);;
             } else {
                 // 删除 mumble user
                 Mumble::where('user_id', $user_id)->delete();

@@ -38,7 +38,7 @@ class CreateMumbleMumbleuserTable extends Migration
 
             $table->string('username', 254);
             $table->string('pwhash', 90);
-            $table->string('group')->nullable();
+            $table->string('groups')->nullable();
             $table->string('hashfn', 20);
             $table->string('display_name', 254);
             $table->string('certhash', 254)->nullable();
@@ -50,7 +50,7 @@ class CreateMumbleMumbleuserTable extends Migration
 
         Schema::table('mumble_mumbleuser', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('group')->references('name')->on('squads');
+            $table->foreign('groups')->references('name')->on('squads');
         });
     }
     /**
