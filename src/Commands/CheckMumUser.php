@@ -8,14 +8,8 @@
 
 namespace Jambo\Seat\QQ\Commands;
 
-use Seat\Web\Models\Squads\SquadMember;
-use Jambo\Seat\QQ\Models\Mumble;
 use Illuminate\Console\Command;
-use Jambo\Seat\QQ\Models\Titles;
 use Illuminate\Support\Facades\DB;
-use Seat\Web\Models\User;
-use Seat\Web\Models\Squads\Squad;
-use Seat\Eveapi\Models\Character\CharacterInfo;
 
 /**
  * Class Synchronise.
