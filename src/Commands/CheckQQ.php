@@ -9,7 +9,6 @@
 namespace Jambo\Seat\QQ\Commands;
 
 use Seat\Web\Models\Squads\SquadMember;
-use Jambo\Seat\QQ\Models\Mumble;
 use Jambo\Seat\QQ\Models\QQInfo;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +58,7 @@ class CheckQQ extends Command
 
         foreach ($QQ as $user_id) {
             // 如果 qq user 在 squad 中
-            if (isset($user_id, $SquadMembers)) {
+            if (isset($SquadMembers[$user_id])) {
                 // 修改 group 数据为当前 squad name
                 QQInfo::where('user_id', $user_id)
                     ->update(['group' => $SquadName[$SquadMembers[$user_id]]]);

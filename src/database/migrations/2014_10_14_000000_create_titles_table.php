@@ -23,7 +23,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateQqTable extends Migration
+class CreateTitlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -32,21 +32,17 @@ class CreateQqTable extends Migration
      */
     public function up()
     {
-        Schema::create('qq', function (Blueprint $table) {
+        Schema::dropIfExists('titles');
+        Schema::create('titles', function (Blueprint $table) {
 
             
             $table->unsignedInteger('user_id')->primary();
-            $table->bigInteger('qq')->unique()->nullable();
-            $table->string('char_name')->unique();
             $table->string('title')->nullable();
-            $table->string('group')->nullable();
             
         });
 
         // Schema::table('qq', function (Blueprint $table) {
         //     //$table->foreign('user_id')->references('id')->on('users');
-        //     $table->foreign('group')->references('name')->on('squads');
-        //     $table->foreign('title')->references('title')->on('title');
         // });
     }
 
@@ -58,6 +54,6 @@ class CreateQqTable extends Migration
     public function down()
     {
 
-        Schema::drop('qq');
+        Schema::drop('titles');
     }
 }

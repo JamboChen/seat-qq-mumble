@@ -10,15 +10,15 @@ namespace Jambo\Seat\QQ\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QQInfo extends Model
+class Titles extends Model
 {
-    protected $table = 'qq';
+    protected $table = 'titles';
 
     protected $primaryKey = 'user_id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'qq', 'char_name', 'title', 'group'
+        'title', 
     ];
 }
