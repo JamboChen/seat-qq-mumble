@@ -32,6 +32,7 @@ class CreateMumbleMumbleuserTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('mumble_mumbleuser');
         Schema::create('mumble_mumbleuser', function (Blueprint $table) {
 
             $table->unsignedInteger('user_id')->primary();
@@ -46,11 +47,6 @@ class CreateMumbleMumbleuserTable extends Migration
             $table->dateTime('last_disconnect', 6)->nullable();
             $table->longText('release')->nullable();
             $table->INTEGER('version')->nullable();
-        });
-
-        Schema::table('mumble_mumbleuser', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('groups')->references('name')->on('squads');
         });
     }
     /**

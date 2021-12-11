@@ -15,8 +15,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "require": {
-    },
     "extra": {
         "laravel": {
             "providers": [

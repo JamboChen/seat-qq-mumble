@@ -40,20 +40,20 @@ class MumbleController extends Controller
         $user = auth()->user();
         $address = '27.50.162.226';
         $port = '64738';
-        $username = $user->main_character_id;
-        
+        $username = $user->id+25565;
+
         // 数据库中有数据则读取
-        if(Mumble::where('user_id', $user->id)->exists()){
+        if (Mumble::where('user_id', $user->id)->exists()) {
             $password = Mumble::where('user_id', $user->id)->first()['pwhash'];
         }
         //没有则创建
         else {
             // 生成随机密码
-            $password = bin2hex(random_bytes(16));
+            $password = bin2hex(random_bytes(8));
             // 保存数据
             $muminfo = new Mumble();
             $muminfo->user_id = $user->id;
-            $muminfo->username = $user->main_character_id;
+            $muminfo->username = $username;
             $muminfo->pwhash = $password;
             $muminfo->hashfn = 'none';
             $muminfo->display_name = $user['name'];
@@ -66,10 +66,8 @@ class MumbleController extends Controller
     {
 
         // 重置密码
-        $muminfo = Mumble::where('user_id', auth()->user()->id)->first();
-        $muminfo->pwhash = bin2hex(random_bytes(8));
-        $muminfo->save();
-        
+        Mumble::where('user_id', auth()->user()->id)->update(['pwhash' => bin2hex(random_bytes(8))]);
+
         return redirect()->back()->with('success', '重置成功');
     }
 }
