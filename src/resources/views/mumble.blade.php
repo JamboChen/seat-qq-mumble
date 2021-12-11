@@ -11,19 +11,19 @@
         <form method="POST" action="">
             <div class="card-body">
                 <div class="form-group">
-                    <label class="control-label">服务器 IP</label>
+                    <label for="ip">服务器 IP</label>
                     <input type="text" class="form-control" id="ip" value="{{ $address }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">服务器端口</label>
+                    <label for="port">服务器端口</label>
                     <input type="text" class="form-control" id="port" value="{{ $port }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">用户名</label>
+                    <label for="username">用户名</label>
                     <input type="text" class="form-control" id="username" value="{{ $username }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="srpPingContent">密码</label>
+                    <label for="setpw">密码</label>
                     <input type="text" class="form-control" name="setpw" id="setpw" value="{{ $password }}" readonly>
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
