@@ -28,15 +28,6 @@
         </form>
     </div>
 
-@php
-    use Illuminate\Support\Facades\DB;
-    $test  = DB::table('titles')->where('user_id', 4)->value('title');
-    
-    print_r($test!=null)
-
-@endphp
-
-
 @stop
 
 @push('javascript')

@@ -43,8 +43,10 @@ class CheckMumUser extends Command
     public function handle()
     {
         // 获取 mum 用户列表
-        $mumble_users = DB::table('mumble_mumbleuser')->pluck('user_id');
-        foreach ($mumble_users as $user_id) {
+        $mumble_users = DB::table('mumble_mumbleuser')->get();
+
+        foreach ($mumble_users as $mumble_user) {
+            $user_id = $mumble_user->user_id;
 
             // 获取用户所属组
             $squads_list = DB::table('squad_member')->where('user_id', $user_id)->pluck('squad_id')->toArray();
@@ -66,19 +68,19 @@ class CheckMumUser extends Command
                 }
             }
 
-            // 获取主角色名
-            $char_name = DB::table('users')->where('id', $user_id)->value('name');
-            // 获取主角色 ID
-            $char_id = DB::table('character_infos')->where('name', $char_name)->value('character_id');
-            $corp_history_list = DB::table('character_corporation_histories')
-                ->where('character_id', $char_id)->pluck('corporation_id')->toarray();
-            // 获取主角色军团 ID
-            $corp_id = end($corp_history_list);
-            // 获取军团简称
-            $corp_ticker = DB::table('corporation_infos')->where('corporation_id', $corp_id)->value('ticker');
+            // 获取用户信息 [id, 公司简称, title, 角色名]
+            $users_info = DB::table('users')
+                ->join('character_infos', 'character_infos.name', 'users.name')
+                ->join('titles', 'titles.user_id', 'users.id')
+                ->join('character_corporation_histories', 'character_corporation_histories.character_id', 'character_infos.character_id')
+                ->join('corporation_infos', 'corporation_infos.corporation_id', 'character_corporation_histories.corporation_id')
+                ->select('users.id', 'corporation_infos.ticker', 'titles.title', 'character_infos.name')
+                ->where('users.id', $user_id)
+                ->get()->toarray();
 
-            // 获取用户 title
-            $title = DB::table('titles')->where('user_id', $user_id)->value('title');
+            $corp_ticker = $users_info[0]->ticker;
+            $title = $users_info[0]->title;
+            $char_name = $users_info[0]->name;
 
             // 如果没有title
             if ($title == null) {
@@ -87,10 +89,13 @@ class CheckMumUser extends Command
                 $display_name = sprintf('%s-%s/%s', $corp_ticker, $title, $char_name);
             }
 
+            // 如果数据相同就跳过
+            if ($mumble_user->groups == $groups_str and $mumble_user->display_name == $display_name) {
+                continue;
+            }
             $mumble_user_info = ['groups' => $groups_str, 'display_name' => $display_name];
             DB::table('mumble_mumbleuser')->where('user_id', $user_id)->update($mumble_user_info);
         }
-
 
         $this->line('Mumble users check finish');
     }
